@@ -1,4 +1,3 @@
-{-# LANGUAGE InstanceSigs #-}
 module Board.MyBoardInstance where
 
 import Board.Board
@@ -7,18 +6,33 @@ import Board.Symbol
 newtype MyBoard = MyBoard [[Symbol]]
 
 instance Board MyBoard where
-  printBoard :: MyBoard -> IO ()
   printBoard b = do putStrLn $ showMyBoard b
-  
-  empty :: Int -> Int -> MyBoard
-  empty r c = MyBoard $ replicate r $ replicate c E
-  
-  placeS :: (Int, Int) -> MyBoard -> Symbol -> MyBoard
-  placeS (r, c) (MyBoard b) s = 
-    MyBoard (replaceAt c (replaceAt r s (b !! c)) b)
 
-  getS :: (Int, Int) -> MyBoard -> Symbol
-  getS (r, c) (MyBoard b) = (b !! c) !! r
+  empty r c = MyBoard $ replicate r $ replicate c E
+
+  placeS (r, c) (MyBoard b) s =
+    MyBoard (replaceAt r (replaceAt c s (b !! r)) b)
+
+  getS (r, c) (MyBoard b) = (b !! r) !! c
+
+  getRow i (MyBoard b) = b !! i
+
+  getCol i (MyBoard b) = map ( !! i ) b
+
+  getWidth (MyBoard b) = length $ head b
+  getHeight (MyBoard b) = length b
+
+  allRows (MyBoard b) = b
+
+  allCols (MyBoard b) =
+    [getCol i (MyBoard b) | i <- [0..(getWidth (MyBoard b) -1)]]
+
+  allDiagonals (MyBoard b) = error "AllDiagonals not implemented yet"
+
+
+
+
+
 
 replaceAt :: Int -> a -> [a] -> [a]
 replaceAt i val xs =
