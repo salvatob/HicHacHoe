@@ -1,5 +1,5 @@
 {-# LANGUAGE InstanceSigs #-}
-module Board.Printing (someFunc, MyBoard(..)) where
+module Board.MyBoardInstance (someFunc, MyBoard(..)) where
 
 import Board.Board
 
