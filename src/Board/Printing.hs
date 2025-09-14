@@ -1,66 +1,36 @@
-module Board.Printing (someFunc) where
+{-# LANGUAGE InstanceSigs #-}
+module Board.Printing (someFunc, MyBoard(..)) where
 
-import Board.Board 
+import Board.Board
 
 
 data Symbol = O | X | E
   deriving (Show)
 
+renderSymbol :: Symbol -> Char
+renderSymbol O = 'O'
+renderSymbol X = 'X'
+renderSymbol E = '.'
 
-newtype MyBoard = MyBoard [Symbol]
+-- instance Show Symbol where
+--   show :: Symbol -> String
+--   show O = "O"
+--   show X = "X"
+--   show E = "."
+
+newtype MyBoard = MyBoard [[Symbol]]
   deriving (Show)
 
 instance Board MyBoard where
-  -- show (MyBoard b) = printBoard b
-  printBoard (MyBoard b) = printMyBoard b
+  -- show (MyBoard b) = Prelude.show b
+  printBoard b = do putStrLn $ showMyBoard b
+  empty r c = MyBoard $ replicate r $ replicate c E
 
 someFunc :: IO ()
 someFunc = putStrLn "someFunc"
 
--- printMyBoard :: MyBoard -> IO ()
-printMyBoard :: [Symbol] -> IO ()
-printMyBoard board
--- printMyBoard (MyBoard board)
-  | not $ checkSize board = error "Board is not of size 9"
-  | otherwise =
-    do
-      let (a,b,c) = thirds board
-      printRow a
-      putStrLn ""
 
-      putStrLn "-----"
-      printRow b
-      putStrLn ""
+showMyBoard :: MyBoard -> String
+-- showMyBoard (MyBoard []) = ""
+showMyBoard (MyBoard b) = unlines $ map (map renderSymbol) b
 
-      putStrLn "-----"
-      printRow c
-      putStrLn ""
-
-
-printRow ::  Show a => [a] -> IO ()
-printRow [] = return ()
-printRow [x] = putStr (Prelude.show x)
-printRow (x:xs) =
-  do
-    putStr (Prelude.show x)
-    putChar '|'
-    printRow xs
-
-
-thirds :: [a] -> ([a], [a], [a])
-thirds l
-  | len < 3 = error "Not enough items"
-  | mod len 3 /= 0 = error "Items are not divisible by three"
-  | otherwise =
-    (
-      take t l,
-      take t (drop t l),
-      take t $ drop (t*2) l
-    )
-    where
-      len = length l
-      t = div len 3
-
-
-checkSize :: [a] -> Bool
-checkSize board = length board == 9
