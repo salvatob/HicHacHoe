@@ -58,7 +58,9 @@ library
     import:           warnings
 
     -- Modules exported by the library.
-    exposed-modules:  Board.Printing
+    exposed-modules:  
+        Board.Printing
+        Board.Board
 
     -- Modules included in this library but not exported.
     -- other-modules:
@@ -99,6 +101,10 @@ executable HicHacHoe
 
     -- Base language which the package is written in.
     default-language: Haskell2010
+
+    other-modules:       
+        Board.Printing
+        Board.Board
 
 test-suite HicHacHoe-test
     -- Import common warning flags.
