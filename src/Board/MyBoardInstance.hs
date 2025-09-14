@@ -1,33 +1,28 @@
 {-# LANGUAGE InstanceSigs #-}
-module Board.MyBoardInstance (someFunc, MyBoard(..)) where
+module Board.MyBoardInstance where
 
 import Board.Board
-
-
-data Symbol = O | X | E
-  deriving (Show)
-
-renderSymbol :: Symbol -> Char
-renderSymbol O = 'O'
-renderSymbol X = 'X'
-renderSymbol E = '.'
-
--- instance Show Symbol where
---   show :: Symbol -> String
---   show O = "O"
---   show X = "X"
---   show E = "."
+import Board.Symbol
 
 newtype MyBoard = MyBoard [[Symbol]]
-  deriving (Show)
 
 instance Board MyBoard where
-  -- show (MyBoard b) = Prelude.show b
+  printBoard :: MyBoard -> IO ()
   printBoard b = do putStrLn $ showMyBoard b
+  
+  empty :: Int -> Int -> MyBoard
   empty r c = MyBoard $ replicate r $ replicate c E
+  
+  placeS :: (Int, Int) -> MyBoard -> Symbol -> MyBoard
+  placeS (r, c) (MyBoard b) s = 
+    MyBoard (replaceAt c (replaceAt r s (b !! c)) b)
 
-someFunc :: IO ()
-someFunc = putStrLn "someFunc"
+  getS :: (Int, Int) -> MyBoard -> Symbol
+  getS (r, c) (MyBoard b) = (b !! c) !! r
+
+replaceAt :: Int -> a -> [a] -> [a]
+replaceAt i val xs =
+  take i xs ++ [val] ++ drop (i+1) xs
 
 
 showMyBoard :: MyBoard -> String
