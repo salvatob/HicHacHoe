@@ -256,3 +256,6 @@ ghc.nix/
 # clangd
 .clangd
 dist-newstyle/
+
+
+git_link.txt
