@@ -22,13 +22,25 @@ instance Board MyBoard where
   getWidth (MyBoard b) = length $ head b
   getHeight (MyBoard b) = length b
 
+  rowIndices (MyBoard b) = [0..(getHeight (MyBoard b) -1)]
+  colIndices (MyBoard b) = [0..(getWidth (MyBoard b) -1)]
+
   allRows (MyBoard b) = b
 
-  allCols (MyBoard b) =
-    [getCol i (MyBoard b) | i <- [0..(getWidth (MyBoard b) -1)]]
+  allCols b =
+    [getCol j b | j <- colIndices b]
 
   allDiagonals (MyBoard b) = diagonalsTLBR b ++ diagonalsTRBL b
 
+  nextStates s (MyBoard b) =
+    foldl
+    (\acc coords->
+      if getS coords (MyBoard b) /= E then acc
+      else MyBoard (replaceAtMatrix coords s b) : acc)
+    []
+    coordinates
+    where
+      coordinates = [(i,j) | i <- rowIndices (MyBoard b), j <- colIndices (MyBoard b)]
 
 
 
@@ -39,6 +51,8 @@ replaceAt :: Int -> a -> [a] -> [a]
 replaceAt i val xs =
   take i xs ++ [val] ++ drop (i+1) xs
 
+replaceAtMatrix :: (Int, Int) -> a -> [[a]] -> [[a]]
+replaceAtMatrix (i, j) val xs = replaceAt i (replaceAt j val (xs !! i)) xs
 
 showMyBoard :: MyBoard -> String
 showMyBoard (MyBoard b) = unlines $ map (map renderSymbol) b

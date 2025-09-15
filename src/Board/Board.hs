@@ -11,8 +11,11 @@ class Board b where
   getRow :: Int -> b -> [Symbol]
   getCol :: Int -> b -> [Symbol]
   getWidth :: b -> Int
+  rowIndices :: b -> [Int]
+  colIndices :: b -> [Int]
   getHeight :: b -> Int
   allRows :: b -> [[Symbol]]
   allCols :: b -> [[Symbol]]
   allDiagonals :: b -> [[Symbol]]
+  nextStates :: Symbol -> b -> [b]
 
