@@ -32,4 +32,14 @@ tests = TestList
       [O,E,O],
       [X,E,O]
     ])~=? O
+    ,"test grid main diag win" ~: isTerminal 3 ( MyBoard [
+      [X,E,O],
+      [O,X,O],
+      [X,E,X]
+    ])~=? X
+    ,"test grid oppo diag win" ~: isTerminal 3 ( MyBoard [
+      [X,E,O],
+      [O,O,E],
+      [O,E,E]
+    ])~=? O
   ]

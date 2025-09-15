@@ -257,5 +257,4 @@ ghc.nix/
 .clangd
 dist-newstyle/
 
-
 git_link.txt

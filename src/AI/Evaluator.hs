@@ -5,24 +5,24 @@ import Board.Symbol
 import Board.Board
 
 isTerminal :: (Board b) => Int -> b -> Symbol
-isTerminal l b
+isTerminal len b
   | rowWin /= E = rowWin
   | colWin /= E = colWin
-  -- | diagWin /= E = diagWin
+  | diagWin /= E = diagWin
   | otherwise = E
   where 
-    wins = containsWin l
+    wins = containsWin len
     rowWin = lazyTraverse $ allRows b
     colWin = lazyTraverse $ allCols b
-    -- diagWin = any wins $ allDiagonals b
+    diagWin = lazyTraverse $ allDiagonals b
 
     lazyTraverse ::  [[Symbol]] -> Symbol
     lazyTraverse [] = E
-    lazyTraverse (line:lines)
-      |  x == E    = lazyTraverse lines
+    lazyTraverse (l:ls)
+      |  x == E    = lazyTraverse ls
       | otherwise = x
       where 
-        x = wins line
+        x = wins l
 
 
 
