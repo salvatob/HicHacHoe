@@ -148,3 +148,4 @@ test-suite HicHacHoe-test
         Board.Symbol
         AI.Evaluator
         AI.Minimax
+        TestWinning
