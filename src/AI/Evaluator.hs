@@ -4,8 +4,9 @@ module AI.Evaluator where
 import Board.Symbol
 import Board.Board
 
-isTerminal :: (Board b) => Int -> b -> Symbol
-isTerminal len b
+
+gameFinish :: (Board b) => Int -> b -> Symbol
+gameFinish len b
   | rowWin /= E = rowWin
   | colWin /= E = colWin
   | diagWin /= E = diagWin
@@ -23,6 +24,11 @@ isTerminal len b
       | otherwise = x
       where 
         x = wins l
+
+
+isTerminal :: (Board b) => Int -> b -> Bool
+isTerminal _ b | isFull b   =  True
+isTerminal l b              = gameFinish l b /= E
 
 
 

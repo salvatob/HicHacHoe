@@ -16,7 +16,7 @@ currSymbol True = X
 currSymbol False = O
 
 evalTTT :: MyBoard -> Int
-evalTTT b = getEval $ isTerminal 3 b
+evalTTT b = getEval $ gameFinish 3 b
 
 -- getBestMove (length to win) state (curr player) = next state
 getBestMove :: (Board b) => Int -> b -> Bool -> b
@@ -38,9 +38,9 @@ getBestMove len b maxi = traverseMoves nextMoves nullValue (head nextMoves)
 -- minimax (length to win) state depth maximizing = maximin value
 minimax :: Board b => Int -> b -> Int -> Bool -> Int
 minimax len b depth maxi
-  | depth <= 0 || ter /= E  = getEval (isTerminal len b) + depthHeuristic
+  | depth <= 0 || ter /= E  = getEval (gameFinish len b) + depthHeuristic
   where
-     ter = isTerminal len b
+     ter = gameFinish len b
      depthHeuristic = if maxi then depth else -depth
 
 minimax len b d maxi
