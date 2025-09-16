@@ -1,9 +1,16 @@
 module Main where
 
 import Board.Symbol
-import  Board.Board
-import  Board.MyBoardInstance
+import Board.Board
+import Board.MyBoardInstance
 import AI.Evaluator
+import AI.Minimax
+import ConsoleInterface
+import AI.Minimax (getBestMove)
+import Board.Board (Board(printBoard))
+import AI.Evaluator (gameFinish)
+import Board.Symbol (renderSymbol)
+
 
 
 
@@ -13,21 +20,42 @@ toList (MyBoard b) = b
 main :: IO ()
 main = do
 
-
-  -- return ()
-  putStrLn "Hello, Haskell!"
-  putStrLn ""
-  -- let b0 = MyBoard [[O,E],[E,X]]
   let b0 = empty 3 3 :: MyBoard
-  let b1 = placeS (2,0) b0 X
-  let b2 = placeS (1,1) b1 X
-  let b3 = placeS (0,2) b2 X
-  printBoard b3
+  result <- play b0 False
+  putStrLn $ renderSymbol result ++ " has won"
 
-  -- let h = getS (1,2) b3
-  -- print (renderSymbol h)
-  -- let h2 = getS (2,1) b3
-  -- print (renderSymbol h2)
+  return ()
 
-  let r1 = allDiagonals b3
-  print r1
+
+play :: (Board b) => b -> Bool -> IO Symbol
+play b _ | isTerminal 3 b = do return $ gameFinish 3 b
+
+play b False = do
+  let nextMove = computerMove X b -- :: Board
+  printBoard nextMove
+  result <-  play nextMove True
+  return result
+
+play b True = do
+  nextMove <- playerMove O b -- :: Board
+  result <-  play nextMove False
+  return result
+
+
+-- player is always O
+playerMove :: (Board b) => Symbol -> b -> IO b
+playerMove s b = do
+  putStrLn $ "Please input your next " ++ show s ++" move:"
+  move <- readNextMove :: IO Coords
+  let newBoard = placeS move b s
+  printBoard newBoard
+  putStrLn "Computer playing..."
+  return newBoard
+
+computerMove :: (Board b) => Symbol -> b -> b
+computerMove s b = getBestMove 3 b True
+
+
+
+
+

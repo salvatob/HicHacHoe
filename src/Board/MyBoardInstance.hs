@@ -8,7 +8,7 @@ import Data.Char (chr)
 newtype MyBoard = MyBoard [[Symbol]]
 
 instance Board MyBoard where
-  printBoard b = do putStrLn $ showMyBoard b
+  printBoard b = do putStrLn $ showBoard b
 
   empty r c = MyBoard $ replicate r $ replicate c E
 
@@ -44,6 +44,7 @@ instance Board MyBoard where
     where
       coordinates = [(i,j) | i <- rowIndices (MyBoard b), j <- colIndices (MyBoard b)]
 
+  isFull (MyBoard b) = all (notElem E) b
 
 
 replaceAt :: Int -> a -> [a] -> [a]
@@ -53,8 +54,8 @@ replaceAt i val xs =
 replaceAtMatrix :: (Int, Int) -> a -> [[a]] -> [[a]]
 replaceAtMatrix (i, j) val xs = replaceAt i (replaceAt j val (xs !! i)) xs
 
-showMyBoard :: MyBoard -> String
-showMyBoard (MyBoard b) = unlines $ map (map $ head . renderSymbol) b
+-- showMyBoard :: MyBoard -> String
+-- showMyBoard (MyBoard b) = unlines $ map (map $ head . renderSymbol) b
 
 showBoard :: MyBoard -> String
 showBoard (MyBoard b) =

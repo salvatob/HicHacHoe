@@ -18,4 +18,4 @@ class Board b where
   allCols :: b -> [[Symbol]]
   allDiagonals :: b -> [[Symbol]]
   nextStates :: Symbol -> b -> [b]
-
+  isFull :: b -> Bool
