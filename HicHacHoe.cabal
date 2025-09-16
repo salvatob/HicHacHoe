@@ -113,6 +113,7 @@ executable HicHacHoe
         Board.Symbol
         AI.Evaluator
         AI.Minimax
+        ConsoleInterface
 
 test-suite HicHacHoe-test
     -- Import common warning flags.
