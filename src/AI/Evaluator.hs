@@ -42,5 +42,3 @@ containsWin len line = f line 0 0
     f (O:ys) _ os = f ys 0 (os+1)
 
 
-
--- evaluate :: Int -> MyBoard -> Int
