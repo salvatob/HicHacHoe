@@ -42,4 +42,16 @@ tests = TestList
       [O,O,E],
       [O,E,E]
     ])~=? O
+    ,"test grid 4*4 row of 3" ~: X ~=? isTerminal 3 ( MyBoard [
+      [O,O,E,X],
+      [X,X,X,X],
+      [O,E,E,O],
+      [O,E,E,O]
+    ]) 
+    ,"test grid 4*4 row of 4" ~: X ~=? isTerminal 4 ( MyBoard [
+      [O,O,E,X],
+      [X,X,X,X],
+      [O,E,E,O],
+      [O,E,E,O]
+    ]) 
   ]
