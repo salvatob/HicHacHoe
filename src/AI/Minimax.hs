@@ -33,22 +33,23 @@ getBestMove len b maxi = traverseMoves nextMoves nullValue (head nextMoves)
         |  otherwise                = traverseMoves bs bestScore   bestMove
       where
         -- currMoveVal = 0
-        currMoveVal = minimax len move 3 maxi  
+        currMoveVal = minimax len move 3 maxi
 
 -- minimax (length to win) state depth maximizing = maximin value
 minimax :: Board b => Int -> b -> Int -> Bool -> Int
-minimax len b depth _ 
-  | depth <= 0 || ter /= E  = getEval $ isTerminal len b
+minimax len b depth maxi
+  | depth <= 0 || ter /= E  = getEval (isTerminal len b) + depthHeuristic
   where
      ter = isTerminal len b
+     depthHeuristic = if maxi then depth else -depth
 
 minimax len b d maxi
-  | maxi = 
+  | maxi =
     maximum [minimax len board (d-1) False | board <- nextBoards]
-  | not maxi = 
+  | not maxi =
     minimum [minimax len board (d-1) True | board <- nextBoards]
 
   | otherwise = error "How the fck could there be anything else that bool or not bool. The pattern matching police sucks"
-  where 
+  where
     nextBoards = nextStates (currSymbol maxi) b
 
