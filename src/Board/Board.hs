@@ -5,7 +5,7 @@ import Board.Symbol
 
 class Board b where
   printBoard ::  b -> IO ()
-  empty :: Int -> Int -> b
+  empty :: b
   placeS :: (Int, Int) -> b -> Symbol -> b
   getS ::  (Int, Int) -> b -> Symbol
   getRow :: Int -> b -> [Symbol]

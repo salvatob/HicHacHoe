@@ -10,7 +10,7 @@ newtype MyBoard = MyBoard [[Symbol]]
 instance Board MyBoard where
   printBoard b = do putStrLn $ showBoard b
 
-  empty r c = MyBoard $ replicate r $ replicate c E
+  empty = MyBoard $ replicate 3 $ replicate 3 E
 
   placeS (r, c) (MyBoard b) s =
     MyBoard (replaceAt r (replaceAt c s (b !! r)) b)
