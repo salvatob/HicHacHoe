@@ -19,3 +19,12 @@ class Board b where
   allDiagonals :: b -> [[Symbol]]
   nextStates :: Symbol -> b -> [b]
   isFull :: b -> Bool
+
+
+
+replaceAt :: Int -> a -> [a] -> [a]
+replaceAt i val xs =
+  take i xs ++ [val] ++ drop (i+1) xs
+
+replaceAtMatrix :: (Int, Int) -> a -> [[a]] -> [[a]]
+replaceAtMatrix (i, j) val xs = replaceAt i (replaceAt j val (xs !! i)) xs

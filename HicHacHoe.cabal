@@ -62,6 +62,7 @@ library
         Board.MyBoardInstance
         Board.Board
         Board.Symbol
+        Board.BigBoard
         AI.Evaluator
         AI.Minimax
 
@@ -111,6 +112,7 @@ executable HicHacHoe
         Board.MyBoardInstance
         Board.Board
         Board.Symbol
+        Board.BigBoard
         AI.Evaluator
         AI.Minimax
         ConsoleInterface
@@ -147,6 +149,7 @@ test-suite HicHacHoe-test
         Board.MyBoardInstance
         Board.Board
         Board.Symbol
+        Board.BigBoard
         AI.Evaluator
         AI.Minimax
         TestWinning

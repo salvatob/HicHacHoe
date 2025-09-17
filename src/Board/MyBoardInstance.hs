@@ -47,13 +47,6 @@ instance Board MyBoard where
   isFull (MyBoard b) = all (notElem E) b
 
 
-replaceAt :: Int -> a -> [a] -> [a]
-replaceAt i val xs =
-  take i xs ++ [val] ++ drop (i+1) xs
-
-replaceAtMatrix :: (Int, Int) -> a -> [[a]] -> [[a]]
-replaceAtMatrix (i, j) val xs = replaceAt i (replaceAt j val (xs !! i)) xs
-
 -- showMyBoard :: MyBoard -> String
 -- showMyBoard (MyBoard b) = unlines $ map (map $ head . renderSymbol) b
 
