@@ -8,9 +8,9 @@ import Data.List (maximumBy)
 import Data.Ord (comparing)
 
 getEval :: Symbol -> Int
-getEval E = 0
-getEval X = 1000
-getEval O = -1000
+getEval E =        0
+getEval X =  1000000
+getEval O = -1000000
 
 currSymbol :: Bool -> Symbol
 currSymbol True = X
@@ -24,9 +24,9 @@ isSymbolMaxing s = error $ "Symbol " ++ show s ++ "is neither max OR min"
 evalTTT :: MyBoard -> Int
 evalTTT b = getEval $ gameFinish 3 b
 
--- getBestMove (length to win) state (curr player) = next state
-getBestMove :: (Board b) => Int -> b -> Bool -> b
-getBestMove len b maxi = snd $
+-- getBestMove (length to win)    depth state (curr player) = next state
+getBestMove :: (Board b) => Int -> Int -> b -> Bool -> b
+getBestMove len _ b maxi = snd $
       maximumBy comp movePairs
         where
           nextMoves = nextStates (currSymbol maxi) b
