@@ -28,3 +28,4 @@ replaceAt i val xs =
 
 replaceAtMatrix :: (Int, Int) -> a -> [[a]] -> [[a]]
 replaceAtMatrix (i, j) val xs = replaceAt i (replaceAt j val (xs !! i)) xs
+

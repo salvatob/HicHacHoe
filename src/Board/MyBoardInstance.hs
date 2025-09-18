@@ -8,12 +8,12 @@ import Data.Char (chr)
 newtype MyBoard = MyBoard [[Symbol]]
 
 instance Board MyBoard where
-  printBoard b = do putStrLn $ showBoard b
-
-  empty = MyBoard $ replicate 3 $ replicate 3 E
-
   placeS (r, c) (MyBoard b) s =
     MyBoard (replaceAt r (replaceAt c s (b !! r)) b)
+
+  printBoard (MyBoard b) = do putStrLn $ showBoard b
+
+  empty = MyBoard $ replicate 3 $ replicate 3 E
 
   getS (r, c) (MyBoard b) = (b !! r) !! c
 
@@ -50,8 +50,8 @@ instance Board MyBoard where
 -- showMyBoard :: MyBoard -> String
 -- showMyBoard (MyBoard b) = unlines $ map (map $ head . renderSymbol) b
 
-showBoard :: MyBoard -> String
-showBoard (MyBoard b) =
+showBoard :: [[Symbol]] -> String
+showBoard b =
   unlines $
     showFirstRow w :
     zipWith showRow  [1..] b
