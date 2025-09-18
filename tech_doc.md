@@ -15,3 +15,6 @@ The core algorithm used is a standard minimax.
 Evaluation functions are decoupled, abstracted and ready to be easily replaced or altered.
 
 The actual App provides comfortable console interface for playing on the std IO.
+
+Unit tests are implemented using the HUnit package. It should be downloaded automatically by cabal.
+They can be then run with `cabal test`
