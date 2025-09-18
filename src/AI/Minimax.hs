@@ -5,7 +5,6 @@ import Board.Board
 import Board.MyBoardInstance
 import AI.Evaluator
 import Data.List (maximumBy)
-import Data.Ord (comparing)
 
 getEval :: Symbol -> Int
 getEval E =        0
@@ -48,7 +47,7 @@ getBestMove eval len _ b maxi = snd $
 
 -- minimax (length to win) state depth maximizing = maximin value
 minimax :: Board b => (b -> Int) -> Int -> Int -> Bool -> b -> Int
-minimax eval len depth maxi b
+minimax eval len depth _ b
   | depth <= 0 || isTerminal len b  = (eval b) + depthHeuristic
   where
     --  ter = gameFinish len b

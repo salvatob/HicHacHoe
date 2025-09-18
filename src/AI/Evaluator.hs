@@ -5,6 +5,8 @@ import Board.Symbol
 import Board.Board
 import Data.List
 
+
+-- checks a TTT board. Returns symbol, that has wot the game, is draw, returns E
 gameFinish :: (Board b) => Int -> b -> Symbol
 gameFinish len b
   | rowWin /= E = rowWin
@@ -25,11 +27,10 @@ gameFinish len b
       where
         x = wins l
 
-
+-- checks, if the game tree node is a leaf
 isTerminal :: (Board b) => Int -> b -> Bool
 isTerminal _ b | isFull b   =  True
 isTerminal l b              = gameFinish l b /= E
-
 
 
 
@@ -48,6 +49,7 @@ containsWin len line = f line 0 0
     f (O:ys) _ os = f ys 0 (os+1)
 
 
+-- evaluates a CX board, used for infinite minimax
 staticEval :: (Board b) => Int -> b -> Int
 staticEval _ b =
   sum (map evalLine rows) +
@@ -58,7 +60,7 @@ staticEval _ b =
     cols = allCols b
     diags = allDiagonals b
 
-
+-- heuristically evaluates a line of symbols (row/col/diag)
 evalLine :: [Symbol] -> Int
 evalLine line = sum $ map evalGroup groups
   where
@@ -67,6 +69,7 @@ evalLine line = sum $ map evalGroup groups
       $ filter (\g -> (head g) /= E) $ group line :: [(Int, Symbol)]
 
 
+-- heuristics for static board evaluation
 evalGroup :: (Int, Symbol) -> Int
 evalGroup (1, s) = evalSymb s
 evalGroup (2, s) = 5 * evalSymb s

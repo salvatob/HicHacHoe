@@ -48,8 +48,6 @@ instance Board MyBoard where
   isFull (MyBoard b) = all (notElem E) b
 
 
--- showMyBoard :: MyBoard -> String
--- showMyBoard (MyBoard b) = unlines $ map (map $ head . renderSymbol) b
 
 showBoard :: [[Symbol]] -> String
 showBoard b =

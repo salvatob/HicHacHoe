@@ -28,17 +28,22 @@ askGamemode = do
   return (gamemode, opponent)
 
 
+printResult :: Symbol -> IO ()
+printResult E = do putStrLn "Game was a draw"
+printResult s = do putStrLn $ show s ++ " has won"
+
 playGame :: (GameMode, Opponent) -> IO Symbol
 playGame (TTT, Computer) = do 
+  putStrLn "------"
   let b0 = empty :: MyBoard
 
   printBoard b0
   let p1 = playerMove
   let p2 = computerMoveCX
 
-  res <- playCX p1 p2 b0
+  res <- playTTT p1 p2 b0
 
-  putStrLn $ show res ++ " has won"
+  printResult res
   return res
 
 playGame (TTT, Human) = do 
@@ -48,9 +53,9 @@ playGame (TTT, Human) = do
   let p1 = playerMove
   let p2 = playerMove
 
-  res <- playCX p1 p2 b0
+  res <- playTTT p1 p2 b0
 
-  putStrLn $ show res ++ " has won"
+  printResult res
   return res
 
 playGame (ConnectX, Computer) = do 
@@ -62,7 +67,7 @@ playGame (ConnectX, Computer) = do
 
   res <- playCX p1 p2 b0
 
-  putStrLn $ show res ++ " has won"
+  printResult res
   return res
 
 playGame (ConnectX, Human) = do 
@@ -74,7 +79,7 @@ playGame (ConnectX, Human) = do
 
   res <- playCX p1 p2 b0
 
-  putStrLn $ show res ++ " has won"
+  printResult res
   return res
 
 
@@ -132,7 +137,7 @@ playCX p1 p2 initial = do
 
 playerMove :: (Board b) => Symbol -> Int -> b -> IO b
 playerMove s _ b = do
-  putStrLn $ "Please input your next " ++ show s ++" move:"
+  putStrLn $ "Please input your next " ++ show s ++" move: example: b1"
   move <- readNextMove :: IO Coords
   let newBoard = placeS move b s
   -- printBoard newBoard
