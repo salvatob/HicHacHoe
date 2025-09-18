@@ -10,7 +10,7 @@ newtype BigBoard = BigBoard [[Symbol]]
 instance Board BigBoard where
   placeS (r, c) (BigBoard b) s = BigBoard $
     (
-    (if isRight then resizeRight E else id)  .  
+    (if isRight then resizeRight E else id)  .
     (if isLeft then resizeLeft E else id) .
     (if isDown then resizeDown E else id) .
     (if isUp then resizeUp E else id))
@@ -47,15 +47,16 @@ instance Board BigBoard where
 
   allDiagonals (BigBoard b) = diagonalsTLBR b ++ diagonalsTRBL b
 
-  nextStates s (BigBoard b) =
+  nextStates s b =
     foldl
     (\acc coords->
-      if getS coords (BigBoard b) /= E then acc
-      else BigBoard (replaceAtMatrix coords s b) : acc)
+      if getS coords b /= E then acc
+      else  placeS coords b s : acc)
+      -- else BigBoard (replaceAtMatrix coords s b) : acc)
     []
     coordinates
     where
-      coordinates = [(i,j) | i <- rowIndices (BigBoard b), j <- colIndices (BigBoard b)]
+      coordinates = [(i,j) | i <- rowIndices b, j <- colIndices b]
 
   isFull (BigBoard b) = all (notElem E) b
 
