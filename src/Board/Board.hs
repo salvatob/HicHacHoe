@@ -3,6 +3,8 @@ module Board.Board where
 import Board.Symbol 
 
 
+-- abstraction over a playing board
+-- should be tha main type used in outside functions
 class Board b where
   printBoard ::  b -> IO ()
   empty :: b

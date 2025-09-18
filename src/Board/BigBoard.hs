@@ -5,6 +5,8 @@ import Board.MyBoardInstance
 import Board.Symbol
 
 
+-- Board instance, with the option to resize the board on
+-- moves near border of the playing filed
 newtype BigBoard = BigBoard [[Symbol]]
 
 instance Board BigBoard where

@@ -5,6 +5,7 @@ import Board.Symbol
 import Data.List (intercalate)
 import Data.Char (chr)
 
+-- simple 3x3 Board instance
 newtype MyBoard = MyBoard [[Symbol]]
 
 instance Board MyBoard where
