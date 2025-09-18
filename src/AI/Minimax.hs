@@ -25,13 +25,13 @@ evalTTT :: MyBoard -> Int
 evalTTT b = getEval $ gameFinish 3 b
 
 -- getBestMove (length to win)    depth state (curr player) = next state
-getBestMove :: (Board b) => Int -> Int -> b -> Bool -> b
-getBestMove len _ b maxi = snd $
+getBestMove :: (Board b) => (b-> Int) -> Int -> Int -> b -> Bool -> b
+getBestMove eval len _ b maxi = snd $
       maximumBy comp movePairs
         where
           nextMoves = nextStates (currSymbol maxi) b
         
-          currMoveVal = minimax len 3 (not maxi)
+          currMoveVal = minimax eval len 3 (not maxi)
 
           movePairs = [(currMoveVal m, m) | m <- nextMoves] -- :: [(Int, b)]
 
@@ -45,21 +45,22 @@ getBestMove len _ b maxi = snd $
 -- depth heuristic encourages player to win in as few moves as possible
 -- the more depth is left, the more score the player gets
 
+
 -- minimax (length to win) state depth maximizing = maximin value
-minimax :: Board b => Int -> Int -> Bool -> b -> Int
-minimax len depth maxi b
-  | depth <= 0 || isTerminal len b  = getEval ter + depthHeuristic
+minimax :: Board b => (b -> Int) -> Int -> Int -> Bool -> b -> Int
+minimax eval len depth maxi b
+  | depth <= 0 || isTerminal len b  = (eval b) + depthHeuristic
   where
-     ter = gameFinish len b
+    --  ter = gameFinish len b
     --  depthHeuristic = if maxi then depth else -depth
      depthHeuristic = 0
 
 
-minimax len d maxi b
+minimax eval len d maxi b
   | maxi =
-    maximum [minimax len (d-1) False board | board <- nextBoards]
+    maximum [minimax eval len (d-1) False board | board <- nextBoards]
   | not maxi =
-    minimum [minimax len (d-1) True board | board <- nextBoards]
+    minimum [minimax eval len (d-1) True board | board <- nextBoards]
 
   | otherwise = error "How the fck could there be anything else that bool or not bool. The pattern matching police sucks"
   where

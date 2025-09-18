@@ -59,9 +59,6 @@ staticEval _ b =
     diags = allDiagonals b
 
 
-
-
-
 evalLine :: [Symbol] -> Int
 evalLine line = sum $ map evalGroup groups
   where

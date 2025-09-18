@@ -1,4 +1,5 @@
--- {-# HLINT ignore "Redundant return" #-}
+{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+{-# HLINT ignore "Redundant return" #-}
 module Main where
 
 import Board.Board
@@ -11,16 +12,9 @@ import Board.Symbol
 
 main :: IO ()
 main = do
+  mode <- askGamemode
 
-  let b0 = empty :: BigBoard 
-
-  printBoard b0
-
-  -- let options = nextStates O b0
-
-  -- mapM_ printBoard options
-
-  res <- playTTT b0 True
+  _ <- playGame mode
 
   return ()
 
@@ -33,41 +27,134 @@ askGamemode = do
 
   return (gamemode, opponent)
 
--- play :: (Board b) => 
--- play  player1MoveGen player2MoveGen
+
+playGame :: (GameMode, Opponent) -> IO Symbol
+playGame (TTT, Computer) = do 
+  let b0 = empty :: MyBoard
+
+  printBoard b0
+  let p1 = playerMove
+  let p2 = computerMoveCX
+
+  res <- playCX p1 p2 b0
+
+  putStrLn $ show res ++ " has won"
+  return res
+
+playGame (TTT, Human) = do 
+  let b0 = empty :: MyBoard
+
+  printBoard b0
+  let p1 = playerMove
+  let p2 = playerMove
+
+  res <- playCX p1 p2 b0
+
+  putStrLn $ show res ++ " has won"
+  return res
+
+playGame (ConnectX, Computer) = do 
+  let b0 = empty :: BigBoard
+
+  printBoard b0
+  let p1 = playerMove
+  let p2 = computerMoveCX
+
+  res <- playCX p1 p2 b0
+
+  putStrLn $ show res ++ " has won"
+  return res
+
+playGame (ConnectX, Human) = do 
+  let b0 = empty :: BigBoard
+
+  printBoard b0
+  let p1 = playerMove
+  let p2 = playerMove
+
+  res <- playCX p1 p2 b0
+
+  putStrLn $ show res ++ " has won"
+  return res
 
 
-playTTT :: (Board b) => b -> Bool -> IO Symbol
-playTTT b _ | isTerminal winLength b = do return $ gameFinish winLength b
+playTTT :: (Board b) => (Symbol -> Int -> b -> IO b) -> (Symbol -> Int -> b -> IO b) -> b -> IO Symbol
+playTTT p1 p2 initial = do
+  result <- play p1 E True initial
+  return result
+
+  where
+    winLength = 3
+
+    -- play :: (Symbol -> Int -> b -> IO b) -> Symbol -> Bool -> b -> IO Symbol
+    play _ _ _ b | isTerminal winLength b = do
+        return $ gameFinish winLength b
+
+    play player _ True b = do
+      nextMove <- player O winLength b -- :: Board
+      printBoard nextMove
+      result <- play p2 X False nextMove
+      return result
+
+    play player _ False b  = do
+      nextMove <- player X winLength b -- :: Board
+      printBoard nextMove
+      result <- play p1 O True nextMove
+      return result
+
+
+
+playCX :: (Board b) => (Symbol -> Int -> b -> IO b) -> (Symbol -> Int -> b -> IO b) -> b -> IO Symbol
+playCX p1 p2 initial = do
+  result <- play p1 E True initial
+  return result
+
   where
     winLength = 5
 
+    -- play :: (Symbol -> Int -> b -> IO b) -> Symbol -> Bool -> b -> IO Symbol
+    play _ _ _ b | isTerminal winLength b = do
+        return $ gameFinish winLength b
 
-playTTT b False = do
-  let nextMove = computerMove O b -- :: Board
-  printBoard nextMove
-  result <-  playTTT nextMove True
-  return result
+    play player _ True b = do
+      nextMove <- player O winLength b -- :: Board
+      printBoard nextMove
+      result <- play p2 X False nextMove
+      return result
 
-playTTT b True = do
-  nextMove <- playerMove X b -- :: Board
-  result <-  playTTT nextMove False
-  return result
+    play player _ False b  = do
+      nextMove <- player X winLength b -- :: Board
+      printBoard nextMove
+      result <- play p1 O True nextMove
+      return result
 
 
-playerMove :: (Board b) => Symbol -> b -> IO b
-playerMove s b = do
-  putStrLn $ "Please input your next " ++ (renderSymbol s) ++" move:"
+
+playerMove :: (Board b) => Symbol -> Int -> b -> IO b
+playerMove s _ b = do
+  putStrLn $ "Please input your next " ++ show s ++" move:"
   move <- readNextMove :: IO Coords
   let newBoard = placeS move b s
-  printBoard newBoard
-  putStrLn "Computer playing..."
+  -- printBoard newBoard
   return newBoard
 
-computerMove :: (Board b) => Symbol -> b -> b
-computerMove s b = getBestMove 5 4 b $ isSymbolMaxing s
+computerMoveTTT :: (Board b) => Symbol -> Int -> b -> IO b
+computerMoveTTT s l b = do
+    putStrLn $ "Computer playing as " ++ show s
+    let move = getBestMove (getEval . gameFinish 3) l depth b $ isSymbolMaxing s
+    -- printBoard move
+    -- putStrLn "Computer has played."
+    return move
+  where
+    depth = 9
 
 
 
+computerMoveCX :: (Board b) => Symbol -> Int -> b -> IO b
+computerMoveCX s l b = do
+    putStrLn "Computer playing..."
+    return $ getBestMove (staticEval 5) l depth b $ isSymbolMaxing s
+  where
+    depth = 4
 
 
