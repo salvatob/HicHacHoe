@@ -12,61 +12,52 @@ import Board.Symbol
 main :: IO ()
 main = do
 
-  let b0 = empty :: BigBoard
-  -- let b0 = empty :: MyBoard
+  let b0 = empty :: BigBoard 
+
   printBoard b0
 
-  -- let b1 = placeS ((2,2)) b0 X
-  -- printBoard b1
-  
-  -- let b2 = placeS ((1,4)) b1 O
-  -- printBoard b2
+  -- let options = nextStates O b0
 
-  result <- play b0 False
-  putStrLn $ renderSymbol result ++ " has won"
+  -- mapM_ printBoard options
+
+  res <- playTTT b0 True
 
   return ()
 
 
 
-askGamemode :: (Board b) => IO (b, Int)
+askGamemode ::  IO (GameMode, Opponent)
 askGamemode = do
   gamemode <- queryGameMode :: IO GameMode
+  opponent <- queryOpponent :: IO Opponent
 
-  case gamemode of
-    TTT -> do
-      let ttt = empty :: MyBoard
-      return (ttt, 3)
+  return (gamemode, opponent)
 
-    ConnectX -> do
-      winLength <- queryGameSize :: IO Int
-      let mode = empty :: BigBoard
-      return (mode, winLength)
-
-  error "Invalid game mode has been selected"
-  -- return ()
+-- play :: (Board b) => 
+-- play  player1MoveGen player2MoveGen
 
 
-play :: (Board b) => b -> Bool -> IO Symbol
-play b _ | isTerminal winLength b = do return $ gameFinish winLength b
+playTTT :: (Board b) => b -> Bool -> IO Symbol
+playTTT b _ | isTerminal winLength b = do return $ gameFinish winLength b
   where
-    winLength = 4
+    winLength = 5
 
-play b False = do
+
+playTTT b False = do
   let nextMove = computerMove O b -- :: Board
   printBoard nextMove
-  result <-  play nextMove True
+  result <-  playTTT nextMove True
   return result
 
-play b True = do
+playTTT b True = do
   nextMove <- playerMove X b -- :: Board
-  result <-  play nextMove False
+  result <-  playTTT nextMove False
   return result
 
 
 playerMove :: (Board b) => Symbol -> b -> IO b
 playerMove s b = do
-  putStrLn $ "Please input your next " ++ show s ++" move:"
+  putStrLn $ "Please input your next " ++ (renderSymbol s) ++" move:"
   move <- readNextMove :: IO Coords
   let newBoard = placeS move b s
   printBoard newBoard
@@ -74,7 +65,7 @@ playerMove s b = do
   return newBoard
 
 computerMove :: (Board b) => Symbol -> b -> b
-computerMove s b = getBestMove 3 b $ isSymbolMaxing s
+computerMove s b = getBestMove 5 4 b $ isSymbolMaxing s
 
 
 
