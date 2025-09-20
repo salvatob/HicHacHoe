@@ -3,9 +3,9 @@
 Project is separated into 3 parts:
 
 ### Board
-The main purpose of the Board module is to encapsulate behaviour of the playing board.
+The Board module encapsulates the behavior of the playing board. Its purpose is to abstract away the representation of the board while providing a standard interface that the rest of the system can rely on.
 
-It contains features such as: 
+Main features:
 - printing the board to std
 - executing moves (adding symbols to the board)
 - generating all moves
