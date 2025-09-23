@@ -115,18 +115,18 @@ isTerminal :: (Board b) => Int -> b -> Bool
 where the first parameter represents number of successive `symbols` needed for a player to win, and b is the current board. 
 
 #### Static evaluation
-The minimax wouldn't be copmlete without a static evaluation function. It can be found in `src/AI/Evaluator.hs`.
+The minimax wouldn't be complete without a static evaluation function. It can be found in `src/AI/Evaluator.hs`.
 This is the one used for the larger game variant, Connect 5.
 ```haskell
 -- evaluates a CX board, used for infinite minimax
 staticEval :: (Board b) => Int -> b -> Int
-staticEval len board = "minimax value"...
+staticEval len board = "static value if the state"...
 ```
 - len - represents the number of `symbols` in a line needed to win
 - board is the current state
 
-Since `Board` implements handy methods, for getting all rows, columns, and diagonals in the grid, `staticEval` counts succesive `symbols` on each "line",
-adding their heuristicaly defined score to the total score. Mapping of the individual scoring ratios is located in the same file.  
+Since `Board` implements handy methods for getting all rows, columns, and diagonals in the grid, `staticEval` counts successive `symbols` on each "line",
+adding their heuristically defined score to the total score. Mapping of the individual scoring ratios is located in the same file.  
 
 ---
 
