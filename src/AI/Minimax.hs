@@ -24,7 +24,7 @@ evalTTT :: MyBoard -> Int
 evalTTT b = getEval $ gameFinish 3 b
 
 -- getBestMove (length to win)    depth state (curr player) = next state
-getBestMove :: (Board b) => (b-> Int) -> Int -> Int -> b -> Bool -> b
+getBestMove :: (Board b) => (b -> Int) -> Int -> Int -> b -> Bool -> b
 getBestMove eval len _ b maxi = snd $
       maximumBy comp movePairs
         where
@@ -41,11 +41,11 @@ getBestMove eval len _ b maxi = snd $
   
 
 
+
 -- depth heuristic encourages player to win in as few moves as possible
 -- the more depth is left, the more score the player gets
 
 
--- minimax (length to win) state depth maximizing = maximin value
 minimax :: Board b => (b -> Int) -> Int -> Int -> Bool -> b -> Int
 minimax eval len depth _ b
   | depth <= 0 || isTerminal len b  = (eval b) + depthHeuristic
