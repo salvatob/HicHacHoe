@@ -1,6 +1,6 @@
 # Technical Documentation
 
-This project is separated into three main parts:
+The project is separated into three main parts:
 
 ---
 
@@ -193,6 +193,7 @@ main = do
   
   return ()
 ```
+
 
 
 
