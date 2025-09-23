@@ -15,6 +15,71 @@ The Board module encapsulates the behavior of the playing board. Its purpose is 
 
 Most of the application’s architecture relies on the `Board` typeclass. This allows alternative implementations to be swapped in without changing the rest of the code. The typeclass encapsulates the standard methods while hiding implementation details.
 
+#### The `Symbol` dataclass
+For ease of use, I am working with symbol as it's own type. This decision was made purely to catch some bugs early during compilation.
+```haskell
+data Symbol = O | X | E
+  deriving (Show, Eq)
+```
+In this project, `E` means "empty cell".
+
+#### The `Board` Typeclass
+
+The core of the board logic is the `Board` typeclass, defined in `src/Board/Board.hs`. This typeclass specifies the interface that any board implementation must provide. By using this abstraction, the AI and other modules can operate on any board type that implements this interface, without knowing the details of its internal representation.
+
+The most important functions in the `Board` typeclass are:
+
+```haskell
+class Board b where
+  printBoard :: b -> IO ()
+  empty      :: b
+  placeS     :: (Int, Int) -> b -> Symbol -> b
+  nextStates :: Symbol -> b -> [b]
+  -- ...other methods...
+```
+
+Where:
+- `printBoard :: b -> IO ()`  
+  Prints the current board state to stdout in a human-readable format, with coordinates, so humans can.
+
+- `empty :: b`
+  Returns a new, empty instance.
+
+- `placeS :: (Int, Int) -> b -> Symbol -> b`  
+  Places a symbol (X or O) at the specified coordinates on the board, returning a new board state.
+
+- `nextStates :: Symbol -> b -> [b]`  
+  Generates all possible next board states with one specified symbol added from the current state.
+
+#### `Board` instances
+The library currently contains two `Board` instances.
+The first is `SimpleBoard`. It is internally represented as a plain 3x3 2D list of `Symbols`.
+Here is a showcase of some methods implemetations:
+```haskell
+-- simple 3x3 Board instance
+newtype SimpleBoard = SimpleBoard [[Symbol]]
+
+instance Board SimpleBoard where
+  placeS (r, c) (SimpleBoard b) s =
+    SimpleBoard (replaceAt r (replaceAt c s (b !! r)) b)
+
+  printBoard (SimpleBoard b) = do putStrLn $ showBoard b
+
+  empty = SimpleBoard $ replicate 3 $ replicate 3 E
+
+  getS (r, c) (SimpleBoard b) = (b !! r) !! c
+
+  getRow i (SimpleBoard b) = b !! i
+
+  getCol i (SimpleBoard b) = map ( !! i ) b
+
+```
+
+
+Second instance is called `BigBoard`.\
+Its It's meaning is a representation of arbitrarily infinite grid, for which some methods are a bit more complicated. 
+It is located in module `src/Board/BigBoard.hs`.
+
 ---
 ### AI
 The AI module handles responsibilities of the computer player.
@@ -25,7 +90,7 @@ The AI module handles responsibilities of the computer player.
 - The AI module also provides a function to determine whether a board state is terminal
 
 
-Most important function exported from this module is `/src/AI/Minimax.getBestMove`.
+The most important function exported from the module `/src/AI/Minimax.hs` is `getBestMove`.
 Its signature is:
 ```haskell
 getBestMove :: (Board b) => (b -> Int) -> Int -> Int -> b -> Bool -> b
@@ -109,5 +174,6 @@ main = do
   
   return ()
 ```
+
 
 
