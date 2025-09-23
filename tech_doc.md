@@ -9,14 +9,14 @@ The Board module encapsulates the behavior of the playing board. Its purpose is 
 
 #### Main features:
 - Printing the board to stdout.
-- Executing moves (placing symbols on the board).
+- Executing moves (placing `symbols` on the board).
 - Generating all legal moves.
 - Resizing the board if needed.
 
 Most of the application’s architecture relies on the `Board` typeclass. This allows alternative implementations to be swapped in without changing the rest of the code. The typeclass encapsulates the standard methods while hiding implementation details.
 
 #### The `Symbol` dataclass
-For ease of use, I am working with symbol as its own type. This decision was made purely to catch some bugs early during compilation.
+For ease of use, I am working with `symbol` as its own type. This decision was made purely to catch some bugs early during compilation.
 ```haskell
 data Symbol = O | X | E
   deriving (Show, Eq)
@@ -46,14 +46,14 @@ Where:
   Returns a new, empty instance.
 
 - `placeS :: (Int, Int) -> b -> Symbol -> b`  
-  Places a symbol (X or O) at the specified coordinates on the board, returning a new board state.
+  Places a `symbol` (X or O) at the specified coordinates on the board, returning a new board state.
 
 - `nextStates :: Symbol -> b -> [b]`  
-  Generates all possible next board states with one specified symbol added from the current state.
+  Generates all possible next board states with one specified `symbol` added from the current state.
 
 #### `Board` instances
 The library currently contains two `Board` instances.
-The first is `SimpleBoard`. It is internally represented as a plain 3x3 2D list of `Symbols`.
+The first is `SimpleBoard`. It is internally represented as a plain 3x3 2D list of `symbols`.
 Here is a showcase of some methods implementations:
 ```haskell
 -- simple 3x3 Board instance
@@ -89,7 +89,7 @@ The AI module handles responsibilities of the computer player.
 - For larger boards, a static evaluation function is used.
 - The AI module also provides a function to determine whether a board state is terminal
 
-
+#### Minimax implementation
 The most important function exported from the module `/src/AI/Minimax.hs` is `getBestMove`.
 Its signature is:
 ```haskell
@@ -98,23 +98,35 @@ getBestMove                   eval       len     depth  b   maxi = nextBoard
 ```
 Where the parameters correspond to:
 - eval (b -> Int) - A static evaluation function. It takes in a Board instance and returns a single value
-- len - The number of symbols that need to be in a line to win. (TicTacToe = 3, Connect5 = 5) 
+- len - The number of `symbols` that need to be in a line to win. (TicTacToe = 3, Connect5 = 5) 
 - depth - The depth that the minimax recursion is allowed to reach.
 - b - The current board. Since the board instance can generate all next boards, we don't need extra function parameter that generates successors
-- maxi - A boolean representing both the symbol currently played, as well as the information, if we're currently the max, or min player
+- maxi - A boolean representing both the `symbol` currently played, as well as the information, if we're currently the max, or min player
 - nextBoard - The function will then return the next state.
 
 The function now has all info to compute minimax value of all succeeding states.
 The minimax function itself is very similar, with the main difference being it doesn't choose from states,
 but it only computes current minimax value of the state. 
 
-The getBestMove function expects to be called on non-terminal node. In other words, the user is expected to check if the board already has a winner, or if it is full, rendering a draw. This is done by a function `src/AI/Evaluator.isTerminal`.
+The `getBestMove` function expects to be called on non-terminal node. In other words, the user is expected to check if the board already has a winner, or if it is full, rendering a draw. This is done by a function `src/AI/Evaluator.isTerminal`.
 ```haskell
 isTerminal :: (Board b) => Int -> b -> Bool
 ```
-where the first parameter represents number of successive symbols needed for a player to win, and b is the current board. 
+where the first parameter represents number of successive `symbols` needed for a player to win, and b is the current board. 
 
+#### Static evaluation
+The minimax wouldn't be copmlete without a static evaluation function. It can be found in `src/AI/Evaluator.hs`.
+This is the one used for the larger game variant, Connect 5.
+```haskell
+-- evaluates a CX board, used for infinite minimax
+staticEval :: (Board b) => Int -> b -> Int
+staticEval len board = "minimax value"...
+```
+- len - represents the number of `symbols` in a line needed to win
+- board is the current state
 
+Since `Board` implements handy methods, for getting all rows, columns, and diagonals in the grid, `staticEval` counts succesive `symbols` on each "line",
+adding their heuristicaly defined score to the total score. Mapping of the individual scoring ratios is located in the same file.  
 
 ---
 
@@ -122,6 +134,8 @@ where the first parameter represents number of successive symbols needed for a p
 Even though this project is primarily intended as a library for tictactoe based games, it does contain a small CLI application.
 - The module contains functionality for playing the games via std IO.
 - The CLI serves as a demonstration and proof of concept for the library components.
+
+The code here is really not very interesting. Mostly it is just IO monads.
 
 ---
 
@@ -166,7 +180,7 @@ main = do
   -- here, the type annotation is crucial, since Board has several different instances
   let b0 = empty :: BigBoard
 
-  -- manual way to place a symbol on the board
+  -- manual way to place a `symbol` on the board
   let b1 = placeS (2,1) b0 O
 
   -- define static evaluation function for minimax 
@@ -180,6 +194,7 @@ main = do
   
   return ()
 ```
+
 
 
 
