@@ -40,7 +40,7 @@ class Board b where
 
 Where:
 - `printBoard :: b -> IO ()`  
-  Prints the current board state to stdout in a human-readable format, with coordinates, so humans can.
+  Prints the current board state to stdout in a human-readable format, with coordinates, so humans can easily describe their moves.
 
 - `empty :: b`
   Returns a new, empty instance.
@@ -81,6 +81,7 @@ Its meaning is a representation of arbitrarily infinite grid, for which some met
 It is located in module `src/Board/BigBoard.hs`.
 
 ---
+
 ### AI
 The AI module handles responsibilities of the computer player.
 - Evaluation functions are decoupled and abstracted, so they can be replaced or altered easily.
@@ -98,7 +99,7 @@ getBestMove                   eval       len     depth  b   maxi = nextBoard
 ```
 Where the parameters correspond to:
 - eval (b -> Int) - A static evaluation function. It takes in a Board instance and returns a single value
-- len - The number of `symbols` that need to be in a line to win. (TicTacToe = 3, Connect5 = 5) 
+- len - The number of `symbols` that need to be in a line to win. (Tic-Tac-Toe = 3, Connect5 = 5) 
 - depth - The depth that the minimax recursion is allowed to reach.
 - b - The current board. Since the board instance can generate all next boards, we don't need extra function parameter that generates successors
 - maxi - A boolean representing both the `symbol` currently played, as well as the information, if we're currently the max, or min player
@@ -127,11 +128,12 @@ staticEval len board = "static value if the state"...
 
 Since `Board` implements handy methods for getting all rows, columns, and diagonals in the grid, `staticEval` counts successive `symbols` on each "line",
 adding their heuristically defined score to the total score. Mapping of the individual scoring ratios is located in the same file.  
+The smaller Tic-Tac-Toe 3x3 version just returns if any player has won.
 
 ---
 
 ### App
-Even though this project is primarily intended as a library for tictactoe based games, it does contain a small CLI application.
+Even though this project is primarily intended as a library for Tic-Tac-Toe based games, it does contain a small CLI application.
 - The module contains functionality for playing the games via std IO.
 - The CLI serves as a demonstration and proof of concept for the library components.
 
@@ -171,12 +173,9 @@ import AI.Minimax
 
 main :: IO ()
 main = do
-  -- mode <- askGamemode
-
-  -- _ <- playGame mode
-
   let winLength = 5
   let searchDepth = 4
+
   -- here, the type annotation is crucial, since Board has several different instances
   let b0 = empty :: BigBoard
 
@@ -194,6 +193,7 @@ main = do
   
   return ()
 ```
+
 
 
 
