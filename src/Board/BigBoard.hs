@@ -1,7 +1,7 @@
 module Board.BigBoard where
 
 import Board.Board
-import Board.MyBoardInstance
+import Board.SimpleBoard
 import Board.Symbol
 
 

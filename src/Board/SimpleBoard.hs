@@ -1,4 +1,4 @@
-module Board.MyBoardInstance where
+module Board.SimpleBoard where
 
 import Board.Board
 import Board.Symbol
@@ -6,46 +6,46 @@ import Data.List (intercalate)
 import Data.Char (chr)
 
 -- simple 3x3 Board instance
-newtype MyBoard = MyBoard [[Symbol]]
+newtype SimpleBoard = SimpleBoard [[Symbol]]
 
-instance Board MyBoard where
-  placeS (r, c) (MyBoard b) s =
-    MyBoard (replaceAt r (replaceAt c s (b !! r)) b)
+instance Board SimpleBoard where
+  placeS (r, c) (SimpleBoard b) s =
+    SimpleBoard (replaceAt r (replaceAt c s (b !! r)) b)
 
-  printBoard (MyBoard b) = do putStrLn $ showBoard b
+  printBoard (SimpleBoard b) = do putStrLn $ showBoard b
 
-  empty = MyBoard $ replicate 3 $ replicate 3 E
+  empty = SimpleBoard $ replicate 3 $ replicate 3 E
 
-  getS (r, c) (MyBoard b) = (b !! r) !! c
+  getS (r, c) (SimpleBoard b) = (b !! r) !! c
 
-  getRow i (MyBoard b) = b !! i
+  getRow i (SimpleBoard b) = b !! i
 
-  getCol i (MyBoard b) = map ( !! i ) b
+  getCol i (SimpleBoard b) = map ( !! i ) b
 
-  getWidth (MyBoard b) = length $ head b
-  getHeight (MyBoard b) = length b
+  getWidth (SimpleBoard b) = length $ head b
+  getHeight (SimpleBoard b) = length b
 
-  rowIndices (MyBoard b) = [0..(getHeight (MyBoard b) -1)]
-  colIndices (MyBoard b) = [0..(getWidth (MyBoard b) -1)]
+  rowIndices (SimpleBoard b) = [0..(getHeight (SimpleBoard b) -1)]
+  colIndices (SimpleBoard b) = [0..(getWidth (SimpleBoard b) -1)]
 
-  allRows (MyBoard b) = b
+  allRows (SimpleBoard b) = b
 
   allCols b =
     [getCol j b | j <- colIndices b]
 
-  allDiagonals (MyBoard b) = diagonalsTLBR b ++ diagonalsTRBL b
+  allDiagonals (SimpleBoard b) = diagonalsTLBR b ++ diagonalsTRBL b
 
-  nextStates s (MyBoard b) =
+  nextStates s (SimpleBoard b) =
     foldl
     (\acc coords->
-      if getS coords (MyBoard b) /= E then acc
-      else MyBoard (replaceAtMatrix coords s b) : acc)
+      if getS coords (SimpleBoard b) /= E then acc
+      else SimpleBoard (replaceAtMatrix coords s b) : acc)
     []
     coordinates
     where
-      coordinates = [(i,j) | i <- rowIndices (MyBoard b), j <- colIndices (MyBoard b)]
+      coordinates = [(i,j) | i <- rowIndices (SimpleBoard b), j <- colIndices (SimpleBoard b)]
 
-  isFull (MyBoard b) = all (notElem E) b
+  isFull (SimpleBoard b) = all (notElem E) b
 
 
 
@@ -55,7 +55,7 @@ showBoard b =
     showFirstRow w :
     zipWith showRow  [1..] b
   where
-    bo = MyBoard b
+    bo = SimpleBoard b
     w = getWidth bo
 
 showFirstRow :: Int -> String

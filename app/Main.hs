@@ -3,7 +3,7 @@
 module Main where
 
 import Board.Board
-import Board.MyBoardInstance
+import Board.SimpleBoard
 import Board.BigBoard
 import AI.Evaluator
 import AI.Minimax
@@ -35,7 +35,7 @@ printResult s = do putStrLn $ show s ++ " has won"
 playGame :: (GameMode, Opponent) -> IO Symbol
 playGame (TTT, Computer) = do 
   putStrLn "------"
-  let b0 = empty :: MyBoard
+  let b0 = empty :: SimpleBoard
 
   printBoard b0
   let p1 = playerMove
@@ -47,7 +47,7 @@ playGame (TTT, Computer) = do
   return res
 
 playGame (TTT, Human) = do 
-  let b0 = empty :: MyBoard
+  let b0 = empty :: SimpleBoard
 
   printBoard b0
   let p1 = playerMove

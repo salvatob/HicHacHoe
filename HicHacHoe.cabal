@@ -59,7 +59,7 @@ library
 
     -- Modules exported by the library.
     exposed-modules:  
-        Board.MyBoardInstance
+        Board.SimpleBoard
         Board.Board
         Board.Symbol
         Board.BigBoard
@@ -109,7 +109,7 @@ executable HicHacHoe
     default-language: Haskell2010
 
     other-modules:       
-        Board.MyBoardInstance
+        Board.SimpleBoard
         Board.Board
         Board.Symbol
         Board.BigBoard
@@ -146,7 +146,7 @@ test-suite HicHacHoe-test
         HUnit
 
     other-modules:       
-        Board.MyBoardInstance
+        Board.SimpleBoard
         Board.Board
         Board.Symbol
         Board.BigBoard

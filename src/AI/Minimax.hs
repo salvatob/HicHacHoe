@@ -2,7 +2,7 @@ module AI.Minimax where
 
 import Board.Symbol
 import Board.Board
-import Board.MyBoardInstance
+import Board.SimpleBoard
 import AI.Evaluator
 import Data.List (maximumBy)
 
@@ -20,7 +20,7 @@ isSymbolMaxing X = True
 isSymbolMaxing O = False
 isSymbolMaxing s = error $ "Symbol " ++ show s ++ "is neither max OR min"
 
-evalTTT :: MyBoard -> Int
+evalTTT :: SimpleBoard -> Int
 evalTTT b = getEval $ gameFinish 3 b
 
 -- getBestMove (length to win)    depth state (curr player) = next state
