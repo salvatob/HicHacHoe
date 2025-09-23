@@ -8,6 +8,8 @@
 
 This program lets you play Tic-Tac-Toe (and its larger-board variants) against the computer in your terminal window. The computer uses an AI algorithm to make its moves, so you can test your skill against it.
 
+Details regarding technical details can be found [HERE.](./tech_doc.md)
+
 ### How to start the program
 Whole project is managed with the CABAL tool.
 For a simple run you:
@@ -67,6 +69,7 @@ Please input your next O move: example: b1
 3 .|.|.
 ```
 May users be warned, that the app currently doesn't support move validation, so behaviour after any illegal move is undefined. 
+
 
 
 
