@@ -21,8 +21,34 @@ The AI module handles responsibilities of the computer player.
 - Evaluation functions are decoupled and abstracted, so they can be replaced or altered easily.
 - The core algorithm used is a standard minimax. It takes an evaluation function as a parameter and chooses the best move up to a certain depth.
 - For Tic-Tac-Toe, the entire game tree can be traversed.
-- For larger boards, a static evaluation function os used.
+- For larger boards, a static evaluation function is used.
 - The AI module also provides a function to determine whether a board state is terminal
+
+
+Most important function exported from this module is `/src/AI/Minimax.getBestMove`.
+Its signature is:
+```haskell
+getBestMove :: (Board b) => (b -> Int) -> Int -> Int -> b -> Bool -> b
+getBestMove                   eval       len     depth  b   maxi = nextBoard
+```
+Where the parameters correspond to:
+- eval (b -> Int) - A static evaulation function. It takes in a Board instance and returns a single value
+- len - The number of symbols, that need to be in a line to win. (TicTacToe = 3, Connect5 = 5) 
+- depth - The depth, that the minimax recurion is allowed to reach.
+- b - The current board. Since the board instance can generate all next boards, we don't need extra function parameter that generates successors
+- maxi - A boolean representing both the symbol currently played, as weel as the information, if we're currently the max, or min player
+- nextBoard - The function will then return the next state.
+
+The function now has all info to compute minimax value of all successing states.
+The minimax function itself is very similar, with the main difference being it doesn't choose from states,
+but it only computes current minimax value of the state. 
+
+The getBestMove function expects to be called on non terminal node. In other words, the user is expected to check, if the board already has a winner, or if it is full, rendedring a draw. THis is done by a function `src/AI/Evaluator.isTerminal`.
+```haskell
+isTerminal :: (Board b) => Int -> b -> Bool
+```
+where the first parameter represents number of succesive symbols needed for a player to win, and b is the current board. 
+
 
 
 ---
@@ -83,3 +109,4 @@ main = do
   
   return ()
 ```
+
