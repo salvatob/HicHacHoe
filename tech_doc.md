@@ -16,7 +16,7 @@ The Board module encapsulates the behavior of the playing board. Its purpose is 
 Most of the application’s architecture relies on the `Board` typeclass. This allows alternative implementations to be swapped in without changing the rest of the code. The typeclass encapsulates the standard methods while hiding implementation details.
 
 #### The `Symbol` dataclass
-For ease of use, I am working with symbol as it's own type. This decision was made purely to catch some bugs early during compilation.
+For ease of use, I am working with symbol as its own type. This decision was made purely to catch some bugs early during compilation.
 ```haskell
 data Symbol = O | X | E
   deriving (Show, Eq)
@@ -54,7 +54,7 @@ Where:
 #### `Board` instances
 The library currently contains two `Board` instances.
 The first is `SimpleBoard`. It is internally represented as a plain 3x3 2D list of `Symbols`.
-Here is a showcase of some methods implemetations:
+Here is a showcase of some methods implementations:
 ```haskell
 -- simple 3x3 Board instance
 newtype SimpleBoard = SimpleBoard [[Symbol]]
@@ -77,7 +77,7 @@ instance Board SimpleBoard where
 
 
 Second instance is called `BigBoard`.\
-Its It's meaning is a representation of arbitrarily infinite grid, for which some methods are a bit more complicated. 
+Its meaning is a representation of arbitrarily infinite grid, for which some methods are a bit more complicated. 
 It is located in module `src/Board/BigBoard.hs`.
 
 ---
@@ -108,7 +108,7 @@ The function now has all info to compute minimax value of all succeeding states.
 The minimax function itself is very similar, with the main difference being it doesn't choose from states,
 but it only computes current minimax value of the state. 
 
-The getBestMove function expects to be called on non terminal node. In other words, the user is expected to check, if the board already has a winner, or if it is full, rendering a draw. This is done by a function `src/AI/Evaluator.isTerminal`.
+The getBestMove function expects to be called on non-terminal node. In other words, the user is expected to check if the board already has a winner, or if it is full, rendering a draw. This is done by a function `src/AI/Evaluator.isTerminal`.
 ```haskell
 isTerminal :: (Board b) => Int -> b -> Bool
 ```
@@ -123,6 +123,8 @@ Even though this project is primarily intended as a library for tictactoe based 
 - The module contains functionality for playing the games via std IO.
 - The CLI serves as a demonstration and proof of concept for the library components.
 
+---
+
 ### Unit Testing
 
 Unit tests cover the non-trivial parts of the project.
@@ -134,10 +136,14 @@ Unit tests cover the non-trivial parts of the project.
 cabal test
 ```
 
+---
+
 ### Possible extensions
 As stated above, the code is written in an abstract way.
 - A new board data structure (for example, if the user wanted to represent the board as a DOK sparse matrix) can be introduced by defining a new type and then providing an implementation of the Board typeclass for it. This involves supplying definitions for all the methods required by the typeclass.
 - The minimax implementation is also designed to be easily extended or optimized. Potential enhancements include adding alpha–beta pruning as a simple and cheap efficiency boost or refining heuristics (such as depth weighting) to improve decision quality.
+
+---
 
 ### Code Examples
 
