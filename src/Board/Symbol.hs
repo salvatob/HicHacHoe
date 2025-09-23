@@ -7,5 +7,3 @@ renderSymbol :: Symbol -> String
 renderSymbol O = "O"
 renderSymbol X = "X"
 renderSymbol E = "."
-
--- instance Show [Symbol] where
