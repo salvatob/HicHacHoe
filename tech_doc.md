@@ -32,22 +32,22 @@ getBestMove :: (Board b) => (b -> Int) -> Int -> Int -> b -> Bool -> b
 getBestMove                   eval       len     depth  b   maxi = nextBoard
 ```
 Where the parameters correspond to:
-- eval (b -> Int) - A static evaulation function. It takes in a Board instance and returns a single value
-- len - The number of symbols, that need to be in a line to win. (TicTacToe = 3, Connect5 = 5) 
-- depth - The depth, that the minimax recurion is allowed to reach.
+- eval (b -> Int) - A static evaluation function. It takes in a Board instance and returns a single value
+- len - The number of symbols that need to be in a line to win. (TicTacToe = 3, Connect5 = 5) 
+- depth - The depth that the minimax recursion is allowed to reach.
 - b - The current board. Since the board instance can generate all next boards, we don't need extra function parameter that generates successors
-- maxi - A boolean representing both the symbol currently played, as weel as the information, if we're currently the max, or min player
+- maxi - A boolean representing both the symbol currently played, as well as the information, if we're currently the max, or min player
 - nextBoard - The function will then return the next state.
 
-The function now has all info to compute minimax value of all successing states.
+The function now has all info to compute minimax value of all succeeding states.
 The minimax function itself is very similar, with the main difference being it doesn't choose from states,
 but it only computes current minimax value of the state. 
 
-The getBestMove function expects to be called on non terminal node. In other words, the user is expected to check, if the board already has a winner, or if it is full, rendedring a draw. THis is done by a function `src/AI/Evaluator.isTerminal`.
+The getBestMove function expects to be called on non terminal node. In other words, the user is expected to check, if the board already has a winner, or if it is full, rendering a draw. This is done by a function `src/AI/Evaluator.isTerminal`.
 ```haskell
 isTerminal :: (Board b) => Int -> b -> Bool
 ```
-where the first parameter represents number of succesive symbols needed for a player to win, and b is the current board. 
+where the first parameter represents number of successive symbols needed for a player to win, and b is the current board. 
 
 
 
@@ -109,4 +109,5 @@ main = do
   
   return ()
 ```
+
 
